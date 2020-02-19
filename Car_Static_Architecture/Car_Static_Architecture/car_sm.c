@@ -24,6 +24,16 @@
 
 uint8_t g_state ;
 
+/*
+ * Fun----------: ERROR_STATUS Car_SM_Init(void);
+ * Input--------: Nothing
+ * Output-------: Nothing
+ * Return-------: ERROR_STATUES
+ * -------------- #E_Ok	->function operation is okay, no error
+ * -------------- #E_Nok->function operation faild, error exists
+ * Description--: Initiate the car state machine with state"stop_state",
+ * -------------- And initiate steering and ultrasonic functions
+*/
 
 
 ERROR_STATUS Car_SM_Init(void){
@@ -39,6 +49,17 @@ ERROR_STATUS Car_SM_Init(void){
 	return state_error ;
 }
 
+/*
+ * Fun----------: ERROR_STATUS Car_SM_Update(void);
+ * Input--------: Nothing
+ * Output-------: Nothing
+ * Return-------: ERROR_STATUES
+ * -------------- #E_Ok	->function operation is okay, no error
+ * -------------- #E_Nok->function operation faild, error exists
+ * Description--: changes car state according to the ultrasonic input
+ * -------------- And represents the motors output for each state
+*/
+
 
 ERROR_STATUS Car_SM_Update(void){
 	
@@ -48,18 +69,16 @@ ERROR_STATUS Car_SM_Update(void){
 	state_error |= Us_Trigger();
 	state_error |= Us_GetDistance(&distance);
 	
-	//timerDelayMs(10);
 	
-	//distance = 50 ;
 	
 	switch(g_state){
 		
 		case STOP_STATE :
-			if (distance<20){
+			if (distance<DISTANCE_BACKWARDING){
 				
 				g_state = BACKWARD_STATE ;
 			}
-			else if ((distance<=40) && (distance>=20)){
+			else if ((distance <= DISTANCE_TURNNING) && ( distance >= DISTANCE_BACKWARDING)){
 				
 				g_state =TURNING_STATE ;
 			}else
@@ -68,21 +87,21 @@ ERROR_STATUS Car_SM_Update(void){
 			
 		case FORWARD_STATE :
 		
-			if (distance<20){
+			if (distance<DISTANCE_BACKWARDING){
 				g_state = BACKWARD_STATE;
-			}else if ( distance<=40 && distance>=20 )
+			}else if ( distance<=DISTANCE_TURNNING && distance >= DISTANCE_BACKWARDING )
 			{
 				g_state=TURNING_STATE;
 			}
 			else
-				state_error |= Steering_SteerCar(CAR_FORWARD,30);
+				state_error |= Steering_SteerCar(CAR_FORWARD,CAR_SPEED);
 			break;
 				
 		case BACKWARD_STATE:
 		
-			if (distance<20){
-				state_error |= Steering_SteerCar(CAR_BACKWARD,30);
-			}else if (distance<=40&&distance>=20)
+			if (distance<DISTANCE_BACKWARDING){
+				state_error |= Steering_SteerCar(CAR_BACKWARD,CAR_SPEED);
+			}else if (distance <= DISTANCE_TURNNING && distance>=DISTANCE_BACKWARDING )
 			{
 				g_state=TURNING_STATE;
 			}
@@ -93,16 +112,20 @@ ERROR_STATUS Car_SM_Update(void){
 			
 		case TURNING_STATE :
 		
-			if (distance<=40&&distance>=20)
+			if (distance <= DISTANCE_TURNNING && distance >= DISTANCE_BACKWARDING )
 			{
-				state_error |= Steering_SteerCar(CAR_LEFT,30);
-			}else if (distance <20){
+				state_error |= Steering_SteerCar(CAR_LEFT,CAR_SPEED);
+			}else if (distance <DISTANCE_BACKWARDING){
 				g_state = BACKWARD_STATE ;
 			}
 			else
 			g_state = FORWARD_STATE ;
 			
 			break;
+			
+		default: 
+		
+		state_error |= E_NOK ;
 		
 	}
 	

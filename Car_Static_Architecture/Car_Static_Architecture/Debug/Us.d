@@ -1,5 +1,5 @@
 Us.d Us.o: .././Us.c .././Us.h .././std_types.h .././registers.h \
- .././ICU.h .././Timer.h \
+ .././TimerDelay.h .././ICU.h .././Timer.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\interrupt.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
@@ -12,13 +12,15 @@ Us.d Us.o: .././Us.c .././Us.h .././std_types.h .././registers.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\version.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\fuse.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h \
- .././DIO.h .././TimerDelay.h
+ .././DIO.h
 
 .././Us.h:
 
 .././std_types.h:
 
 .././registers.h:
+
+.././TimerDelay.h:
 
 .././ICU.h:
 
@@ -49,5 +51,3 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h:
 
 .././DIO.h:
-
-.././TimerDelay.h:

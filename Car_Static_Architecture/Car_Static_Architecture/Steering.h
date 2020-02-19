@@ -36,11 +36,11 @@
 
 
 /**
- * Input: 
- * Output:
- * In/Out:			
+ * Input: nothing
+ * Output: nothing
+ * In/Out:	nothing		
  * Return: The error status of the function.			
- * Description: Initiates the module.
+ * Description: Initiates the module , initialize MOTOR_1 & MOTOR_2 
  * 							
  */
 
@@ -48,9 +48,14 @@ ERROR_STATUS Steering_Init(void);
 
 /**
  * Input: 
- * 	carDirection: The direction of the car from the predefined states of the module.
+ * 	carDirection: The direction of the car from the predefined states of the module:
+																					-> car_STOP
+																					->CAR_FOTWARD
+																					->CAR_BACKWARD
+																					->CAR_RIGHT
+																					->CAR_LEFT
  * 	speed: The speed of the car from 0% to 100%.
- * Output:
+ * Output: nothing
  * In/Out:			
  * Return: The error status of the function.			
  * Description: This function controls the command and the speed of the car.

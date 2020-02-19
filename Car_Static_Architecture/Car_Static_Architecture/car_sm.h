@@ -24,7 +24,7 @@
  * Return-------: ERROR_STATUES
  * -------------- #E_Ok	->function operation is okay, no error
  * -------------- #E_Nok->function operation faild, error exists
- * Description--: Initiate the car state machine with state"forward at speed 80%",
+ * Description--: Initiate the car state machine with state"stop_state",
  * -------------- And initiate steering and ultrasonic functions
 */
 ERROR_STATUS Car_SM_Init(void);

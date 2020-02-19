@@ -9,7 +9,18 @@
 #ifndef TIMERDELAY_H_
 #define TIMERDELAY_H_
 
-void timerDelayMs(uint16_t u16_delay_in_ms);
+
+
+/**
+ * Input: nothing
+ * Output: nothing
+ * In/Out:	nothing		
+ * Return: The error status of the function.			
+ * Description: Initiates the module , initialize MOTOR_1 & MOTOR_2 
+ * 							
+ */
+
+ERROR_STATUS timerDelayMs(uint16_t u16_delay_in_ms);
 
 
 

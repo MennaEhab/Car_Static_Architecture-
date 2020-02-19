@@ -16,15 +16,33 @@
 #define  INT2_EDGE_BIT 6
 #define  tickTimeUs 64
 
+#define MAX_NO_TICKS 256
+
 uint8_t g_interruptCH_No = 0 ;
 static volatile uint8_t g_interruptEdge ;
 static volatile uint8_t g_timerCH ;
-static volatile uint8_t g_fallingEdgeFlag = 0 ;
-static  uint8_t g_ovf_flag = 0 ;
-//volatile uint8_t 
+static volatile uint8_t g_fallingEdgeFlag = FALSE ;
+static  uint8_t g_ovf_flag = FALSE ;
 
-ERROR_STATUS SetExternal_INT_Edge( uint8_t SwICU_Edge ,uint8_t interruptCH_No ){
-	
+
+
+/**************************************************************************
+ * Function 	: SetExternal_INT_Edge                                     *
+ * Input 		: SwICU_Edge  the edge mode for the icu  
+ 
+				interruptCH_No   ->  ICU_CH0							    *
+								 ->   ICU_CH1							    *
+							     ->   ICU_CH1							  *
+ * Return 		: value of type ERROR_STATUS							  *
+ * 				 					  *
+ * Description  : set the edge mode of the external interrupt 			  *
+ * 																		  *
+ **************************************************************************/
+
+
+static ERROR_STATUS SetExternal_INT_Edge( uint8_t SwICU_Edge ,uint8_t interruptCH_No ){
+	uint8_t a_u8_error_state = E_OK ;
+	 
 	DIO_Cfg_s dioCfg_INT2;
 	switch(interruptCH_No){
 		case ICU_CH0 :
@@ -38,90 +56,136 @@ ERROR_STATUS SetExternal_INT_Edge( uint8_t SwICU_Edge ,uint8_t interruptCH_No ){
 			dioCfg_INT2.pins = BIT2;
 			dioCfg_INT2.dir =INPUT;
 			
-			DIO_init(&dioCfg_INT2);
+			a_u8_error_state |= DIO_init(&dioCfg_INT2);
 			
 			if(SwICU_Edge== ICU_RISE_TO_FALL){
 				
 				SET_BIT(INT2_EDGE_GPIO , INT2_EDGE_BIT);
 				}
 			else if(SwICU_Edge== ICU_FALE_TO_RISE)
-			CLEAR_BIT(INT2_EDGE_GPIO , INT2_EDGE_BIT);
+				CLEAR_BIT(INT2_EDGE_GPIO , INT2_EDGE_BIT);
 			else
-			return E_NOK ;
-		break;
+				a_u8_error_state |= E_NOK ;
+			break;
 		default:
-		return E_NOK ;
+			a_u8_error_state |= E_NOK ;
 		
 	}
-	return E_OK ;
+	return a_u8_error_state  ;
 }
 
-ERROR_STATUS SetExternal_INT_enable( uint8_t SwICU_Edge ,uint8_t interruptCH_No ){
+
+/**************************************************************************
+ * Function 	: SetExternal_INT_Edge                                     *
+ * Input 		: SwICU_Edge  the edge mode for the icu  
+ 
+				interruptCH_No   ->  ICU_CH0							    *
+								 ->   ICU_CH1							    *
+							     ->   ICU_CH1							  *
+ * Return 		: value of type ERROR_STATUS							  *
+ * 				 					  *
+ * Description  : enable the external interrupt 	            		  *
+ * 																		  *
+ **************************************************************************/
+
+
+static ERROR_STATUS SetExternal_INT_enable( uint8_t SwICU_Edge ,uint8_t interruptCH_No ){
+
+	uint8_t a_u8_error_state = E_OK ;
+
+	
 		switch(interruptCH_No){
 			case ICU_CH0 :
 			break;
 			case ICU_CH1:
 			break;
 			case ICU_CH2:
-				//SET_BIT(INT2_EN_GPIO , INT2_EN_BIT);
-				INT2_EN_GPIO|= 1<<INT2_EN_BIT ;
+				INT2_EN_GPIO |= 1 << INT2_EN_BIT ;
 			break;
-			default:return E_NOK ;
+			default:
+			a_u8_error_state |= E_NOK ;
 	
 		}
-		return E_OK ;
+		return a_u8_error_state ;
 }
 
+/**************************************************************************
+ * Function 	: Icu_Init                                                *
+ * Input 		: Icu_cfg : pointer to structure of type Icu_cfg_s        *
+ * Return 		: value of type ERROR_STATUS							  *
+ * 				  which is one of the following values:					  *
+ * 				  - E_OK  : initialized successfully					  *
+ *				  - E_NOK : not initialized successfully				  *
+ * Description  : Initializes the ICU by initializing the timer			  *
+ * 				                                     					  *
+ **************************************************************************/
+
 ERROR_STATUS Icu_Init(Icu_cfg_s * Icu_Cfg){
+	
+		uint8_t a_u8_error_state = E_OK ;
+
 	
 		Timer_cfg_s Timer_cfg ;
 		
 		if (Icu_Cfg == NULL)
 		{
-			return E_NOK;
-		}
-		
-		g_interruptCH_No = Icu_Cfg->ICU_Ch_No ;
-/*
-		switch(Icu_Cfg->ICU_Ch_No){
-					//case ICU_CH0:
-					//g_interruptCH_No = INT0_vect ;
-					//break;
-					//case ICU_CH1:
-					//g_interruptCH_No = INT1_vect ;
-					//break;
-					//case ICU_CH2:
-					//g_interruptCH_No = INT2_vect ;
-					//break;
-					//default:
-					//return E_NOK ;
-					//
-					//
-				//}
-*/
-		
-		switch(Icu_Cfg->ICU_Ch_Timer){
-			case ICU_TIMER_CH0 :
+			a_u8_error_state |= E_NOK;
+		}else{
 			
-			Timer_cfg.Timer_CH_NO = TIMER_CH0 ;
-			Timer_cfg.Timer_Mode = TIMER_MODE ;
-			Timer_cfg.Timer_Polling_Or_Interrupt = TIMER_POLLING_MODE ;
-			Timer_cfg.Timer_Prescaler = TIMER_PRESCALER_1024 ;
+			g_interruptCH_No = Icu_Cfg->ICU_Ch_No ;
+
 			
-			Timer_Init(&Timer_cfg);
-			
-			break;
-			case ICU_TIMER_CH1 :
-			break;
-			case ICU_TIMER_CH2 :
-			break;
-			default:return E_NOK ;
+			switch(Icu_Cfg->ICU_Ch_Timer){
+				case ICU_TIMER_CH0 :
+				
+				Timer_cfg.Timer_CH_NO = TIMER_CH0 ;
+				Timer_cfg.Timer_Mode = TIMER_MODE ;
+				Timer_cfg.Timer_Polling_Or_Interrupt = TIMER_POLLING_MODE ;
+				Timer_cfg.Timer_Prescaler = TIMER_PRESCALER_1024 ;
+				
+				Timer_Init(&Timer_cfg);
+				
+				break;
+				case ICU_TIMER_CH1 :
+				break;
+				case ICU_TIMER_CH2 :
+				break;
+				default:
+				a_u8_error_state |= E_NOK ;
+				
+			}
 			
 		}
-		return E_OK ;
+		
+		
+		return a_u8_error_state  ;
 }
 
+
+/***************************************************************************
+ * Function		: Icu_ReadTime
+ * Input		: 
+ *				Icu_Channel --> ICU timer channel
+ *									- ICU_TIMER_CH0
+ *									- ICU_TIMER_CH1
+ *									- ICU_TIMER_CH2
+ *				Icu_EdgeToEdge -- > edges to calculate pusle time between:
+ *									- ICU_RISE_TO_RISE
+ *									- ICU_RISE_TO_FALL
+ *									- ICU_FALE_TO_RISE					   *
+ * Output 		: Icu_Time : pointer to uint32 variable to give the time   *
+ * 				  from falling edge to rising edge						   *
+ * Return 		: value of type ERROR_STATUS							   *
+ * 				  which is one of the following values:					   *
+ * 				  - E_OK : successful									   *
+ *				  - E_NOK : not successful								   *
+ * Description	: calculates the time between 2 edges				       *
+ ***************************************************************************/
+
 ERROR_STATUS Icu_ReadTime(uint8_t Icu_Channel, uint8_t Icu_EdgeToEdge, uint32_t * Icu_Time){
+	
+	uint8_t a_u8_error_state = E_OK ;
+
 	uint16_t no_of_ticks = 0 ;
 	uint16_t timerOfTicks_Us  ;
 	
@@ -130,28 +194,29 @@ ERROR_STATUS Icu_ReadTime(uint8_t Icu_Channel, uint8_t Icu_EdgeToEdge, uint32_t 
 	switch(Icu_Channel){
 			case ICU_TIMER_CH0:
 			
-			SetExternal_INT_Edge(Icu_EdgeToEdge,g_interruptCH_No);
-			SetExternal_INT_enable(Icu_EdgeToEdge,g_interruptCH_No) ;
+			a_u8_error_state |= SetExternal_INT_Edge(Icu_EdgeToEdge,g_interruptCH_No);
+			a_u8_error_state |= SetExternal_INT_enable(Icu_EdgeToEdge,g_interruptCH_No) ;
 			
 			break;
 			case ICU_TIMER_CH1 :
 			break;
 			case ICU_TIMER_CH2 :
 			break;
-			default:return E_NOK ;
+			default:
+			a_u8_error_state |= E_NOK ;
 	}
 	
 	while(!g_fallingEdgeFlag) ;
-	Timer_GetValue(g_timerCH ,&no_of_ticks) ;
-	Timer_GetStatus(TIMER_CH0 ,&g_ovf_flag );
-	if (g_ovf_flag == 1)
+	a_u8_error_state |= Timer_GetValue(g_timerCH ,&no_of_ticks) ;
+	a_u8_error_state |= Timer_GetStatus(TIMER_CH0 ,&g_ovf_flag );
+	if (g_ovf_flag == TRUE)
 	{
-		no_of_ticks=256;
+		no_of_ticks=MAX_NO_TICKS;
 	}
-	g_ovf_flag = 0 ;
+	g_ovf_flag = FALSE ;
 	timerOfTicks_Us = no_of_ticks * tickTimeUs ;
 	*Icu_Time = timerOfTicks_Us ;
-	return E_OK ;
+	return a_u8_error_state ;
 }
 
 
@@ -160,24 +225,27 @@ ERROR_STATUS Icu_ReadTime(uint8_t Icu_Channel, uint8_t Icu_EdgeToEdge, uint32_t 
 ISR(INT2_vect){
 	
 		switch (g_interruptEdge){
-///////////////////////////rising//////////////////////////////////////////////////////////		
+///////////////////////////////rising//////////////////////////////////////////////////////////		
 			case SwICU_EdgeRisiging :
 			DIO_Write(GPIOA,BIT1,HIGH);
 			
 			switch(g_timerCH){
 				case ICU_TIMER_CH0 :
-				//timer_Start();
-				Timer_Start(TIMER_CH0,256);
-				//update the control to start at faling edge
+				
+				Timer_Start(TIMER_CH0,MAX_NO_TICKS);
+				
+				//update the control to start at falling edge
 				MCUCSR &= ~(1<<6) ;
-				//Led_On(LED_0) ;
+				
 				g_interruptEdge = SwICU_EdgeFalling;
 				break;
+				
 				
 			}
 			
 			break;
-/////////////////////////////falling/////////////////////////////////////////////////////			
+////////////////////////////////falling/////////////////////////////////////////////////////
+			
 			case SwICU_EdgeFalling :
 			DIO_Write(GPIOA,BIT1,LOW);
 			switch(g_timerCH){
@@ -187,9 +255,9 @@ ISR(INT2_vect){
 				Timer_Stop(TIMER_CH0);
 				
 				MCUCSR |= 1<<6 ;
-				//Led_Off(LED_0) ;
+				
 				g_interruptEdge = SwICU_EdgeRisiging;
-				g_fallingEdgeFlag = 1 ;
+				g_fallingEdgeFlag = TRUE ;
 				break;
 		}
 	break;

@@ -6,7 +6,10 @@
  */ 
 #include "Timer.h"
 #include "TimerDelay.h"
-void timerDelayMs(uint16_t u16_delay_in_ms){
+
+ERROR_STATUS timerDelayMs(uint16_t u16_delay_in_ms){
+	
+	ERROR_STATUS state_error = E_OK ;
 	
 	uint8_t ovf_flag = 0 ;
 	Timer_cfg_s Timer_cfg ;
@@ -15,23 +18,28 @@ void timerDelayMs(uint16_t u16_delay_in_ms){
 	Timer_cfg.Timer_Polling_Or_Interrupt = TIMER_POLLING_MODE ;
 	Timer_cfg.Timer_Prescaler = TIMER_PRESCALER_64 ;
 	
-	Timer_Init(&Timer_cfg) ;
-	// base 5 since 250 tick is 1 milisec + error 12
+	state_error |= Timer_Init(&Timer_cfg) ;
+	
+	/************************************************************************/
+	/* 250 number of tick  for 1 millisecond - 11 ticks error due to function calls*/
+	/************************************************************************/
 		
-		// no of ticks for one milli sec
+		state_error |= Timer_Start(Timer_cfg.Timer_CH_NO , 239 );
 		
-		Timer_Start(Timer_cfg.Timer_CH_NO , 239 );
+		/* delay required in millisecond */
 		
 		while (u16_delay_in_ms)
 		{
-			Timer_GetStatus (Timer_cfg.Timer_CH_NO , &ovf_flag);
+			/* polling on ovf flag */
+			
+			state_error |= Timer_GetStatus (Timer_cfg.Timer_CH_NO , &ovf_flag);
 			if(ovf_flag == TRUE)
 			{
 				u16_delay_in_ms -- ;
 			}
 			
 		}
-		Timer_Stop(Timer_cfg.Timer_CH_NO);
+		state_error |= Timer_Stop(Timer_cfg.Timer_CH_NO);
 	
-	
+	return state_error ;
 }

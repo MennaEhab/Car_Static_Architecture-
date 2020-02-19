@@ -101,7 +101,7 @@ ERROR_STATUS Motor_Stop(uint8_t Motor_Number);
  * output		: none
  * In out		: none
  * Return		: Initialization_STATUS
- * Description	: Returns status of the motor whether intialized or not
+ * Description	: Returns status of the motor whether initialized or not
  */
  ERROR_STATUS Motor_GetStatus(uint8_t Motor_Number, uint8_t* Mot_status);
 
