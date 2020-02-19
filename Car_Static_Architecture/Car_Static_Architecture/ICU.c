@@ -155,14 +155,6 @@ ERROR_STATUS Icu_ReadTime(uint8_t Icu_Channel, uint8_t Icu_EdgeToEdge, uint32_t 
 }
 
 
-//ISR(TIMER0_OVF_vect){
-	//
-	//// flag if set 
-	////distance >50 ;
-	//
-	//g_ovf_flag = 1 ;
-	//
-//}
 
 
 ISR(INT2_vect){
