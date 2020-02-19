@@ -16,6 +16,12 @@
 #define TURNING_STATE 2
 #define STOP_STATE 3
 
+#define	CAR_SPEED 30
+
+#define DISTANCE_TURNNING 40
+#define DISTANCE_BACKWARDING 20
+
+
 uint8_t g_state ;
 
 
@@ -44,7 +50,7 @@ ERROR_STATUS Car_SM_Update(void){
 	
 	//timerDelayMs(10);
 	
-
+	//distance = 50 ;
 	
 	switch(g_state){
 		

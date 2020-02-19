@@ -20,7 +20,7 @@ uint8_t g_interruptCH_No = 0 ;
 static volatile uint8_t g_interruptEdge ;
 static volatile uint8_t g_timerCH ;
 static volatile uint8_t g_fallingEdgeFlag = 0 ;
-
+static  uint8_t g_ovf_flag = 0 ;
 //volatile uint8_t 
 
 ERROR_STATUS SetExternal_INT_Edge( uint8_t SwICU_Edge ,uint8_t interruptCH_No ){
@@ -143,10 +143,26 @@ ERROR_STATUS Icu_ReadTime(uint8_t Icu_Channel, uint8_t Icu_EdgeToEdge, uint32_t 
 	
 	while(!g_fallingEdgeFlag) ;
 	Timer_GetValue(g_timerCH ,&no_of_ticks) ;
+	Timer_GetStatus(TIMER_CH0 ,&g_ovf_flag );
+	if (g_ovf_flag == 1)
+	{
+		no_of_ticks=256;
+	}
+	g_ovf_flag = 0 ;
 	timerOfTicks_Us = no_of_ticks * tickTimeUs ;
 	*Icu_Time = timerOfTicks_Us ;
 	return E_OK ;
 }
+
+
+//ISR(TIMER0_OVF_vect){
+	//
+	//// flag if set 
+	////distance >50 ;
+	//
+	//g_ovf_flag = 1 ;
+	//
+//}
 
 
 ISR(INT2_vect){
@@ -175,13 +191,15 @@ ISR(INT2_vect){
 			switch(g_timerCH){
 				
 				case ICU_TIMER_CH0 :
+				
 				Timer_Stop(TIMER_CH0);
+				
 				MCUCSR |= 1<<6 ;
 				//Led_Off(LED_0) ;
 				g_interruptEdge = SwICU_EdgeRisiging;
 				g_fallingEdgeFlag = 1 ;
 				break;
 		}
-	
+	break;
 }
 }
