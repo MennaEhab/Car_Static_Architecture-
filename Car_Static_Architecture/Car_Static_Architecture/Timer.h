@@ -124,6 +124,19 @@ ERROR_STATUS Timer_GetStatus(uint8_t Timer_CH_NO, uint8_t* Data);
  */
 ERROR_STATUS Timer_GetValue(uint8_t Timer_CH_NO, uint16_t * Data);
 
+
+/**
+ * Input: 
+ * 	Timer_CH_NO: The channel number of the timer needed to get its value.
+ * Output:
+ * 	Data: This is the output variable of the function which holds the value of the timer.
+ * In/Out:			
+ * Return: The error status of the function.			
+ * Description: This function is used to set the value of the TCNT.
+ * 							
+ */
+
+
 ERROR_STATUS Timer_SetValue(uint8_t Timer_CH_NO, uint16_t  Data);
 
 

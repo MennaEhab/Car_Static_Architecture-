@@ -11,7 +11,7 @@ ERROR_STATUS timerDelayMs(uint16_t u16_delay_in_ms){
 	
 	ERROR_STATUS state_error = E_OK ;
 	
-	uint8_t ovf_flag = 0 ;
+	uint8_t ovf_flag = ZERO_VALUE ;
 	Timer_cfg_s Timer_cfg ;
 	Timer_cfg.Timer_CH_NO = TIMER_CH2 ;
 	Timer_cfg.Timer_Mode = TIMER_MODE ;

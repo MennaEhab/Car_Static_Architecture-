@@ -53,7 +53,7 @@ typedef struct DIO_Cfg_s
 	uint8_t dir;
 }DIO_Cfg_s;
 
-/*
+/**
 *Input: DIO_Cfg_s -> to get PORT name, pins to be initiated and the required direction
 *Output: No output
 *In/Out:
@@ -63,7 +63,7 @@ typedef struct DIO_Cfg_s
 ERROR_STATUS DIO_init (DIO_Cfg_s *DIO_info);
 
 
-/*
+/**
 *Input: GPIO -> to get PORT name
 *					- GPIOA
 *					- GPIOB
@@ -91,7 +91,7 @@ ERROR_STATUS DIO_init (DIO_Cfg_s *DIO_info);
 */
 ERROR_STATUS DIO_Write (uint8_t GPIO, uint8_t pins, uint8_t value);
 
-/*
+/**
 *Input: GPIO -> to get PORT name
 *					- GPIOA
 *					- GPIOB
@@ -119,7 +119,7 @@ ERROR_STATUS DIO_Write (uint8_t GPIO, uint8_t pins, uint8_t value);
 */
 ERROR_STATUS DIO_Read (uint8_t GPIO,uint8_t pins, uint8_t *data);
 
-/*
+/**
 *Input: GPIO -> to get PORT name
 *					- GPIOA
 *					- GPIOB

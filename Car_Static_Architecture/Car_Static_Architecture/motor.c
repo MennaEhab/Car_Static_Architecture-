@@ -10,7 +10,7 @@
 
 #define CAR_FREQUANCY 100
 
-/**
+/*
  * Fun			: Motor_Init
  * Input		: motorNumber
  *	  	  		  #def

@@ -83,7 +83,7 @@ Pwm_Start(PWM_CH1B,50,100) ;*/
 
 timerDelayMs(1000);
 
-sei();
+
 
 //Icu_cfg_s icuCfg;
 	DIO_Cfg_s dioCfgrem;

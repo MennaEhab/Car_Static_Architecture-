@@ -20,50 +20,63 @@ uint8_t g_ModeTimer1 = 0 ;
 uint8_t g_ModeTimer2 = 0 ;
 
 
-//////mode normal mode only
+/*
+ * Input: Pointer to a structure contains the information needed to initialize the timer. 
+ * Output:
+ * In/Out:			
+ * Return: The error status of the function.			
+ * Description: Initiates the module.
+ * 							
+ */
+
+
+
 
 ERROR_STATUS Timer_Init(Timer_cfg_s* Timer_cfg){
 	
+	uint8_t a_u8_error_state = E_OK ;
+	
 	switch(Timer_cfg->Timer_CH_NO){
-////////////////////////////////TIMER 0 //////////////////////////////////////
+		
+/******************** TIMER 0 ***************************/
 		case TIMER_CH0 :
 			TCCR0 = ZERO_VALUE ;
 	
-		/*set the PreScale config*/
+			/*set the PreScale config*/
 		
-		g_prescaleTimer0 = Timer_cfg->Timer_Prescaler ;
-		g_ModeTimer0 = Timer_cfg->Timer_Mode ;
+			g_prescaleTimer0 = Timer_cfg->Timer_Prescaler ;
+			g_ModeTimer0 = Timer_cfg->Timer_Mode ;
 		
-	#ifdef NORMAL_MODE
+			#ifdef NORMAL_MODE
 	
-			/*set normal or compare mode*/
+				/*set normal or compare mode*/
 				
-			TCCR0 |= T0_NORMAL_MODE_MASK ;
+				TCCR0 |= T0_NORMAL_MODE_MASK ;
 				
-			/* set polling or interrupt config*/
-			if (Timer_cfg->Timer_Polling_Or_Interrupt==TIMER_POLLING_MODE)
-			{
-				TIMSK |=TIMER0_POLLING_MODE_MASK ;
-			}else if(Timer_cfg->Timer_Polling_Or_Interrupt==TIMER_INTERRUPT_MODE){
-				TIMSK |=TIMER0_INTERRUPT_NORMAL_MASK;
-			}
+				/* set polling or interrupt config*/
+				if (Timer_cfg->Timer_Polling_Or_Interrupt==TIMER_POLLING_MODE)
+				{
+					TIMSK |=TIMER0_POLLING_MODE_MASK ;
+				}else if(Timer_cfg->Timer_Polling_Or_Interrupt==TIMER_INTERRUPT_MODE){
+					TIMSK |=TIMER0_INTERRUPT_NORMAL_MASK;
+				}
 			
 			
-		#endif
+			#endif
 		
-		#ifdef COMPARE_MODE
-		/*mode*/
-		/*OC*/
-		/*output compare*/
-		/*interrupt*/
-		/**/
+			#ifdef COMPARE_MODE
+			/*mode*/
+			/*OC*/
+			/*output compare*/
+			/*interrupt*/
+			/**/
 	
-		#endif
+			#endif
 		
 		
 		break; 
 		
-//////////////////////////TIMER 1 //////////////////////////////
+/**************************** TIMER 1 ********************************/
 
 		case TIMER_CH1 :
 		
@@ -110,7 +123,8 @@ ERROR_STATUS Timer_Init(Timer_cfg_s* Timer_cfg){
 		
 			TCCR2 = ZERO_VALUE;
 			
-			/*UNKNOWN*/
+			/*set synchronous or asynchronous */
+			
 			ASSR &= 0xF0 ;
 
 			/*set the PreScale config*/
@@ -167,20 +181,31 @@ ERROR_STATUS Timer_Init(Timer_cfg_s* Timer_cfg){
 ///////////////////////ERROR //////////////////////////
 
 		default :
-		return E_NOK ;
+		a_u8_error_state |= E_NOK ;
 		break;
 		
 		
 	}//// end switch of channel type
-	return E_OK ;
+	return a_u8_error_state  ;
 }
 
 
 
-
+/*
+ * Input: 
+ * 	Timer_CH_NO: The channel number of the timer needed to be started.
+ *	Timer_Count: The start value of the timer.
+ * Output:
+ * In/Out:			
+ * Return: The error status of the function.			
+ * Description: This function starts the needed timer.
+ * 							
+ */
 	
 	
 ERROR_STATUS Timer_Start(uint8_t Timer_CH_NO, uint16_t Timer_Count){
+	
+		uint8_t a_u8_error_state = E_OK ;
 	
 		#ifdef NORMAL_MODE 
 		      Timer_SetValue(Timer_CH_NO,256-Timer_Count)	;
@@ -200,7 +225,7 @@ ERROR_STATUS Timer_Start(uint8_t Timer_CH_NO, uint16_t Timer_Count){
 				 OCR2 = Timer_Count;
 				break;
 				default:
-				return E_NOK ;
+				a_u8_error_state |= E_NOK ;
 				break;
 			}
 		
@@ -234,6 +259,8 @@ ERROR_STATUS Timer_Start(uint8_t Timer_CH_NO, uint16_t Timer_Count){
 					TCCR0 |= TIMER0_PRESCALER_1024_MASK ;
 
 					break;
+					default:
+					a_u8_error_state |= E_NOK ;
 					
 					
 				}
@@ -247,7 +274,7 @@ ERROR_STATUS Timer_Start(uint8_t Timer_CH_NO, uint16_t Timer_Count){
 				TCCR0 |= COUNTER_FALLING_MODE_MASK ;
 				
 			}else
-				return E_NOK ;
+				a_u8_error_state |= E_NOK ;
 			
 			break;
 			
@@ -280,6 +307,9 @@ ERROR_STATUS Timer_Start(uint8_t Timer_CH_NO, uint16_t Timer_Count){
 					TCCR1 |= TIMER1_PRESCALER_1024_MASK ;
 
 					break;
+					default:
+					a_u8_error_state |= E_NOK;
+					break;
 					
 					
 				}
@@ -293,7 +323,7 @@ ERROR_STATUS Timer_Start(uint8_t Timer_CH_NO, uint16_t Timer_Count){
 				TCCR1 |= COUNTER_FALLING_MODE_MASK ;
 				
 				}else 
-				return E_NOK ; 
+				a_u8_error_state |= E_NOK ; 
 			
 			
 			break;
@@ -330,7 +360,7 @@ ERROR_STATUS Timer_Start(uint8_t Timer_CH_NO, uint16_t Timer_Count){
 					break;
 					
 					default: 
-					return E_NOK ;
+					a_u8_error_state |= E_NOK ;
 					break;	
 					
 				}///end switch case prescale
@@ -345,11 +375,27 @@ ERROR_STATUS Timer_Start(uint8_t Timer_CH_NO, uint16_t Timer_Count){
 			break;
 		}/// end switch case channels
 		
-	return E_OK ;
+	return a_u8_error_state ;
 	
 }
 
+
+
+/*
+ * Input: 
+ * 	Timer_CH_NO: The channel number of the timer needed to get its status.
+ * Output:
+ * 	Data: A variable of type bool returns if the flag of the timer is raised or not.
+ * In/Out:			
+ * Return: The error status of the function.			
+ * Description: This function is used to return if the flag of the timer is raised or not.
+ * 							
+ */
+
+
 ERROR_STATUS Timer_Stop(uint8_t Timer_CH_NO){
+	
+	uint8_t a_u8_error_state = E_OK ;
 	
 	switch (Timer_CH_NO)
 	{
@@ -363,19 +409,35 @@ ERROR_STATUS Timer_Stop(uint8_t Timer_CH_NO){
 		TCCR2 &=TIMER2_NO_CLOCK_MASK;
 		break;
 		default:
-		return E_NOK ;
+		a_u8_error_state |=  E_NOK ;
 		break;
 	}
-	return E_OK ;
+	return a_u8_error_state ;
 	
 	
 }
 
+
+/*
+ * Input: 
+ * 	Timer_CH_NO: The channel number of the timer needed to get its status.
+ * Output:
+ * 	Data: A variable of type bool returns if the flag of the timer is raised or not.
+ * In/Out:			
+ * Return: The error status of the function.			
+ * Description: This function is used to return if the flag of the timer is raised or not.
+ * 							
+ */
+
+
+
 ERROR_STATUS Timer_GetStatus(uint8_t Timer_CH_NO, uint8_t* Data){
+	
+	uint8_t a_u8_error_state = E_OK ;
 	
 	if (Data == NULL)
 	{
-		return E_NOK ;
+		a_u8_error_state |= E_NOK ;
 	}
 	
 	
@@ -388,7 +450,7 @@ ERROR_STATUS Timer_GetStatus(uint8_t Timer_CH_NO, uint8_t* Data){
 				TIFR |=T0_OVF_FLAG_MASK ;
 			}else
 			(*Data) = FALSE ;
-		break;
+			break;
 		
 		case TIMER_CH1 :
 			if((TIFR&T1_OVF_FLAG_MASK) > ZERO_VALUE)
@@ -400,28 +462,44 @@ ERROR_STATUS Timer_GetStatus(uint8_t Timer_CH_NO, uint8_t* Data){
 			break;
 			
 		case TIMER_CH2 :
-		if((TIFR&T2_OVF_FLAG_MASK) > ZERO_VALUE)
-		{
-			(*Data) = TRUE ;
-			TIFR |=T2_OVF_FLAG_MASK ;
-		}else
-		(*Data) = FALSE ;
-		break;
+			if((TIFR&T2_OVF_FLAG_MASK) > ZERO_VALUE)
+			{
+				(*Data) = TRUE ;
+				TIFR |=T2_OVF_FLAG_MASK ;
+			}else
+			(*Data) = FALSE ;
+			break;
 		
-	default: 
-	return E_NOK ;	
+		default: 
+		a_u8_error_state |= E_NOK ;	
 		
 	}
 	
-	return E_OK ;
+	return a_u8_error_state  ;
 	
 }
 
 
+
+/*
+ * Input: 
+ * 	Timer_CH_NO: The channel number of the timer needed to get its value.
+ * Output:
+ * 	Data: This is the output variable of the function which holds the value of the timer.
+ * In/Out:			
+ * Return: The error status of the function.			
+ * Description: This function is used to return the value of the timer.
+ * 							
+ */
+
+
 ERROR_STATUS Timer_GetValue(uint8_t Timer_CH_NO, uint16_t* Data){
+	
+	uint8_t a_u8_error_state = E_OK ;
+	
 	if (Data == NULL)
 	{
-		return E_NOK ;
+		a_u8_error_state |= E_NOK ;
 	}
 	
 		switch (Timer_CH_NO)
@@ -436,15 +514,29 @@ ERROR_STATUS Timer_GetValue(uint8_t Timer_CH_NO, uint16_t* Data){
 			(*Data) = TCNT2 ;
 			break;
 			default:
-			return E_NOK ;
+			a_u8_error_state |= E_NOK ;
 			break;
 		}
-		return E_OK ;
+		return a_u8_error_state  ;
 	
 }
 
+
+/*
+ * Input: 
+ * 	Timer_CH_NO: The channel number of the timer needed to get its value.
+ * Output:
+ * 	Data: This is the output variable of the function which holds the value of the timer.
+ * In/Out:			
+ * Return: The error status of the function.			
+ * Description: This function is used to set the value of the TCNT.
+ * 							
+ */
+
+
 ERROR_STATUS Timer_SetValue(uint8_t Timer_CH_NO, uint16_t Data){
 	
+		uint8_t a_u8_error_state = E_OK ;
 	
 		switch (Timer_CH_NO)
 		{
@@ -458,10 +550,10 @@ ERROR_STATUS Timer_SetValue(uint8_t Timer_CH_NO, uint16_t Data){
 			 TCNT2 =(Data) ;
 			break;
 			default:
-			return E_NOK ;
+			a_u8_error_state |= E_NOK ;
 			break;
 		}
-		return E_OK ;
+		return a_u8_error_state ;
 		
 }
 
