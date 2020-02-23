@@ -61,7 +61,7 @@ void test_car_sm_init(void){
 
     /************************************************************************************
     * Target Function: car_sm_init
-    * Test Case: the function us_init returns E_NOK and Steering_Init  returns E_OK
+    * Test Case: the function us_init returns E_OK and Steering_Init  returns E_OK
     * data type:
     * Expected OUTPUT: E_NOK
     ************************************************************************************/
