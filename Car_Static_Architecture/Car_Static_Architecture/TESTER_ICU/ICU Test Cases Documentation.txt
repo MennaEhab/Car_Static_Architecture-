@@ -1,0 +1,125 @@
+test case 1:
+
+Target Function: Icu_Init
+Test Case: send a valid address with a valid data to "Icu_Init"
+Expected OUTPUT: PASSED
+Real OUTPUT: PASSED
+
+/**********************************************************************************/
+test case 2:
+
+Target Function: Icu_Init
+Test Case: send a valid address with a valid data to "Icu_Init"
+Expected OUTPUT: PASSED
+Real OUTPUT: PASED
+************************************************************************************/
+test case 3:
+
+Target Function: Icu_Init
+Test Case: send a valid address with a none-valid data (Timer1) data to "Icu_Init"
+NOTE THAT: timer1 shouldn't be handled due to hardware limitations
+Expected OUTPUT: FAILED
+Real OUTPUT: FAILED
+************************************************************************************/
+test case 4:
+
+Target Function: Icu_Init
+Test Case: send a valid address with a valid data to "Icu_Init"
+Expected OUTPUT: PASSED
+Real OUTPUT: PASSED
+************************************************************************************/
+test case 4:
+
+Target Function: Icu_Init
+Test Case: send a NULL pointer to "Icu_Init"
+Expected OUTPUT: FAILED
+Real OUTPUT: FAILED
+************************************************************************************/
+test case 5:
+
+Target Function: Icu_Init
+Test Case: send a NULL pointer to "Icu_Init"
+Expected OUTPUT: FAILED
+Real OUTPUT: FAILED
+************************************************************************************/
+test case 6:
+
+* Target Function: Icu_Init
+* Test Case: send a wiled pointer to "Icu_Init"
+* Expected OUTPUT: FAILED
+* Real OUTPUT: CODE CRASH
+* NOTE: this test case has to be commented while testing any other test case
+************************************************************************************/
+test case 7:
+
+* Target Function: Icu_Init
+* Test Case: send a variable address from different data type to "Icu_Init"
+* Expected OUTPUT: FAILED
+* Real OUTPUT: FAILED
+************************************************************************************/
+test case 8:
+
+* Target Function: Icu_Init
+* Test Case: send a valid address with a none-valid interrupt number to "Icu_Init"
+* Expected OUTPUT: FAILED
+* Real OUTPUT: FAILED
+************************************************************************************/
+test case 9:
+
+* Target Function: Icu_Init
+* Test Case: send a valid address with a none-valid timer number to "Icu_Init"
+* Expected OUTPUT: FAILED
+* Real OUTPUT: FAILED
+************************************************************************************/
+test case 10:
+
+* Target Function: Icu_ReadTime
+* Test Case: send a valid data after initialization to "Icu_ReadTime"
+* Expected OUTPUT: PASSED
+* Real OUTPUT: PASSED
+************************************************************************************/
+test case 11:
+
+* Target Function: Icu_ReadTime
+* Test Case: send a valid data without initialization to "Icu_ReadTime"
+* Expected OUTPUT: FAILED
+* Real OUTPUT: FAILED
+************************************************************************************/
+test case 12:
+
+* Target Function: Icu_ReadTime
+* Test Case: send a none-valid data after initialization to "Icu_ReadTime"
+* Expected OUTPUT: FAILED
+* Real OUTPUT: FAILED
+************************************************************************************/
+test case 13:
+
+* Target Function: Icu_ReadTime
+* Test Case: send a none-valid data after initialization to "Icu_ReadTime"
+* Expected OUTPUT: FAILED
+* Real OUTPUT: FAILED
+************************************************************************************/
+test case 14:
+
+* Target Function: Icu_ReadTime
+* Test Case: send a none-valid data after initialization (an argument from different
+* data type) to "Icu_ReadTime"
+* Expected OUTPUT: FAILED
+* Real OUTPUT: FAILED
+************************************************************************************/
+test case 15:
+
+* Target Function: Icu_ReadTime
+* Test Case: send a none-valid data after initialization (the 3rd argument with out
+* the address reference) to "Icu_ReadTime"
+* Expected OUTPUT: FAILED
+* Real OUTPUT: Code Crash
+* NOTE: this test case has to be commented while testing any other test case
+************************************************************************************/
+test case 15:
+
+Target Function: Icu_ReadTime
+Test Case: send an uninitialized timer channel to "Icu_ReadTime"
+Expected OUTPUT: FAILED
+Real OUTPUT: PASSED
+************************************************************************************/

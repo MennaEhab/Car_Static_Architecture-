@@ -100,8 +100,8 @@ void test_car_sm_Update(void){
     a_u8_error_stateUs_trigger = E_OK ;
     a_u8_error_stateUs_GetDistance = E_OK ;
     a_u8_error_state_Steering_SteerCar = E_OK ;
-
-    state_error|= Car_SM_Update();
+    Car_SM_Init();
+    state_error= Car_SM_Update();
 
     printf("test case 4 :");
 
@@ -123,8 +123,8 @@ void test_car_sm_Update(void){
     a_u8_error_stateUs_trigger = E_NOK ;
     a_u8_error_stateUs_GetDistance = E_OK ;
     a_u8_error_state_Steering_SteerCar = E_OK ;
-
-    state_error|= Car_SM_Update();
+    Car_SM_Init();
+    state_error= Car_SM_Update();
 
     printf("test case 5 :");
 
@@ -145,8 +145,8 @@ void test_car_sm_Update(void){
     a_u8_error_stateUs_trigger = E_NOK ;
     a_u8_error_state_Steering_SteerCar = E_OK ;
     a_u8_error_stateUs_GetDistance = E_NOK ;
-
-    state_error|= Car_SM_Update();
+    Car_SM_Init();
+    state_error= Car_SM_Update();
 
     printf("test case 6 :");
 
@@ -168,8 +168,8 @@ void test_car_sm_Update(void){
     a_u8_error_stateUs_trigger = E_NOK ;
     a_u8_error_stateUs_GetDistance = E_OK ;
     a_u8_error_state_Steering_SteerCar = E_NOK ;
-
-    state_error|= Car_SM_Update();
+    Car_SM_Init();
+    state_error= Car_SM_Update();
 
     printf("test case 7 :");
 
@@ -193,8 +193,8 @@ void test_car_sm_Update(void){
     a_u8_error_stateUs_GetDistance = E_OK ;
     a_u8_error_state_Steering_SteerCar = E_OK ;
 
-
-    state_error|= Car_SM_Update();
+    Car_SM_Init();
+    state_error= Car_SM_Update();
 
     printf("test case 8 :");
 
@@ -218,8 +218,8 @@ void test_car_sm_Update(void){
     a_u8_error_stateUs_trigger = E_OK ;
     a_u8_error_stateUs_GetDistance = E_OK ;
     a_u8_error_state_Steering_SteerCar = E_OK ;
-
-    state_error|= Car_SM_Update();
+    Car_SM_Init();
+    state_error= Car_SM_Update();
 
     printf("test case 9 :");
 
@@ -242,8 +242,8 @@ void test_car_sm_Update(void){
     a_u8_error_stateUs_trigger = E_OK ;
     a_u8_error_stateUs_GetDistance = E_OK ;
     a_u8_error_state_Steering_SteerCar = E_OK ;
-
-    state_error|= Car_SM_Update();
+    Car_SM_Init();
+    state_error= Car_SM_Update();
 
     printf("test case 10 :");
 
