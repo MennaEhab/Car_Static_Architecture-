@@ -7,6 +7,8 @@
 
 #include "Timer.h"
 #include "Timerconfig.h"
+#include "avr/interrupt.h"
+
 
 #define NORMAL_MODE
 //#define  COMPARE_MODE
@@ -18,6 +20,8 @@ uint8_t g_prescaleTimer2 = 0 ;
 uint8_t g_ModeTimer0 = 0 ;
 uint8_t g_ModeTimer1 = 0 ;
 uint8_t g_ModeTimer2 = 0 ;
+
+ volatile static void (* g_ptr_callback_function)(void) = NULL ;
 
 
 /*
@@ -35,6 +39,8 @@ uint8_t g_ModeTimer2 = 0 ;
 ERROR_STATUS Timer_Init(Timer_cfg_s* Timer_cfg){
 	
 	uint8_t a_u8_error_state = E_OK ;
+	
+	g_ptr_callback_function = (volatile void (*)(void))Timer_cfg->Timer_Cbk_ptr;
 	
 	switch(Timer_cfg->Timer_CH_NO){
 		
@@ -145,6 +151,7 @@ ERROR_STATUS Timer_Init(Timer_cfg_s* Timer_cfg){
 			{
 				TIMSK |=TIMER2_POLLING_MODE_MASK ;
 				}else if(Timer_cfg->Timer_Polling_Or_Interrupt==TIMER_INTERRUPT_MODE){
+					
 				TIMSK |=TIMER2_INTERRUPT_NORMAL_MASK;
 			}
 			
@@ -169,6 +176,7 @@ ERROR_STATUS Timer_Init(Timer_cfg_s* Timer_cfg){
 				TIMSK |=TIMER2_POLLING_MODE_MASK ;
 				}else if(Timer_cfg->Timer_Polling_Or_Interrupt==TIMER_INTERRUPT_MODE){
 				TIMSK |=TIMER2_INTERRUPT_COMPARE_MASK;
+				
 			}
 			/**/
 			
@@ -208,7 +216,11 @@ ERROR_STATUS Timer_Start(uint8_t Timer_CH_NO, uint16_t Timer_Count){
 		uint8_t a_u8_error_state = E_OK ;
 	
 		#ifdef NORMAL_MODE 
+			  if(Timer_CH_NO==TIMER_CH1)
+			  Timer_SetValue(Timer_CH_NO,65535-Timer_Count);
+			  else
 		      Timer_SetValue(Timer_CH_NO,256-Timer_Count)	;
+			  
 		#endif
 		
         #ifdef  COMPARE_MODE
@@ -558,3 +570,11 @@ ERROR_STATUS Timer_SetValue(uint8_t Timer_CH_NO, uint16_t Data){
 }
 
 
+ISR(TIMER2_OVF_vect){
+	
+	 g_ptr_callback_function() ;
+	
+		
+
+	
+}

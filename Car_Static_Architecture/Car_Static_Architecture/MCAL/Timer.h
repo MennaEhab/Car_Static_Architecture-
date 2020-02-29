@@ -57,13 +57,13 @@ typedef struct Timer_cfg_s
 	uint8_t Timer_Mode;
 	uint8_t Timer_Polling_Or_Interrupt;
 	uint8_t Timer_Prescaler;
-	void (*Timer_Cbk_ptr)(void);
+	 void (*Timer_Cbk_ptr)(void);
 }Timer_cfg_s;
 
 
 
 /************************************************************************/
-/*		         TIMER FUNCTIONS' PROTOTYPES		        */
+/*				    TIMER FUNCTIONS' PROTOTYPES				        */
 /************************************************************************/
 
 
@@ -75,6 +75,7 @@ typedef struct Timer_cfg_s
  * Description: Initiates the module.
  * 							
  */
+
 ERROR_STATUS Timer_Init(Timer_cfg_s* Timer_cfg);
 
 /**

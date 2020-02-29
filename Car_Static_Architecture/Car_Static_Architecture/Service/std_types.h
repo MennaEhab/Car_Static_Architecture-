@@ -25,7 +25,7 @@ typedef signed long int sint32_t;
 typedef signed long long sint64_t;
 typedef volatile uint8_t* const reg_type8_t;
 typedef volatile uint16_t* const reg_type16_t;
-typedef sint8_t ERROR_STATUS ;
+typedef sint16_t ERROR_STATUS ;
 
 /************************************************************************/
 /*				 		defining boolean values                         */
@@ -45,6 +45,12 @@ typedef sint8_t ERROR_STATUS ;
 
 #define ZERO_VALUE 0 
 
+
+/************************************************************************/
+/*					   bitwise operation		                       */
+/************************************************************************/
+
+
 #define SET_BIT(REG,BIT) REG|=(1<<BIT)
 
 /* Clear a certain bit in any register */
@@ -54,5 +60,22 @@ typedef sint8_t ERROR_STATUS ;
 #define TOGGLE_BIT(REG,BIT) (REG^=(1<<BIT))
 
 
+/************************************************************************/
+/*                   error handling macros		                       */
+/************************************************************************/
+
+#define TMU_module_error -500
+#define DIO_module_error -400
+#define TIMER_module_error -300
+
+#define NULL_PTR_ERROR -1
+#define MODULE_UNINTIALIZED -2
+#define MULTIPLE_INITIALIZATION -3
+#define INVALID__PARAMETER -4
+#define MULTIPLE_START -5
+#define MULTIPLE_STOP -6
+#define FULL_BUFFER -7
+#define DEINIT_WITHOUT_INIT -8
+#define  STOP_WITHOU_SART -9
 
 #endif /* STD_TYPES_H_ */
