@@ -1,0 +1,81 @@
+test case 1:
+
+* Target Function: car_sm_init
+* Test Case: the function us_init and Steering_Init  returns E_OK
+* Expected state_error: E_OK
+* Expected OUTPUT: PASSED
+* Real OUTPUT: PASSED
+************************************************************************************/
+test case 2:
+
+* Target Function: car_sm_init
+* Test Case: the function us_init returns E_NOK and Steering_Init  returns E_OK
+* Expected state_error: E_NOK
+* Expected OUTPUT: PASSED
+* Real OUTPUT: PASSED
+************************************************************************************/
+test case 3:
+
+* Target Function: car_sm_init
+* Test Case: the function us_init returns E_OK and Steering_Init  returns E_NOK
+* Expected state_error: E_NOK
+* Expected OUTPUT: PASSED
+* Real OUTPUT: PASSED
+************************************************************************************/
+test case 4:
+
+* Target Function: car_sm_Update
+* Test Case: the function Us_trigger and Us_GetDistance and Steering_SteerCar return E_OK
+* Expected state_error: E_OK
+* Expected OUTPUT: PASSED
+* Real OUTPUT: PASSED
+************************************************************************************/
+test case 5:
+
+* Target Function: car_sm_Update
+* Test Case: the function  Us_GetDistance and Steering_SteerCar return E_OK  , and Us_trigger returns E_NOK
+* Expected state_error: E_NOK
+* Expected OUTPUT: PASSED
+* Real OUTPUT: PASSED
+************************************************************************************/
+test case 6:
+
+* Target Function: car_sm_Update
+* Test Case: the function  Us_trigger and Steering_SteerCar return E_OK  , and  Us_GetDistance returns E_NOK
+* Expected state_error: E_NOK
+* Expected OUTPUT: PASSED
+* Real OUTPUT: PASSED
+************************************************************************************/
+test case 7:
+
+* Target Function: car_sm_Update
+* Test Case: the function  Us_trigger and  Us_GetDistance return E_OK  , and Steering_SteerCar returns E_NOK
+* Expected state_error: E_NOK
+* Expected OUTPUT: PASSED
+* Real OUTPUT: PASSED
+************************************************************************************/
+test case 8:
+
+* Target Function: car_sm_Update
+* Test Case: get distance from the us_read less than 20
+* data type :
+* Expected state_error: E_OK
+* Expected OUTPUT: PASSED
+* Real OUTPUT: PASSED
+************************************************************************************/
+test case 9:
+
+* Target Function: car_sm_Update
+* Test Case: get distance from the us_read between 20 and 40
+* Expected state_error: E_OK
+* Expected OUTPUT: PASSED
+* Real OUTPUT: PASSED
+************************************************************************************/
+test case 10:
+
+* Target Function: car_sm_Update
+* Test Case: get distance from the us_read more than 40
+* Expected state_error: E_OK
+* Expected OUTPUT: PASSED
+* Real OUTPUT: PASSED
+************************************************************************************/
